@@ -1,6 +1,6 @@
 import string
 
-from django.db import models
+from django.db import models, transaction
 
 from shortuuid.django_fields import ShortUUIDField
 
@@ -13,6 +13,7 @@ class Brand(models.Model):
 
 
 class Customer(models.Model):
+    user_id = models.AutoField(primary_key=True)
     email = models.EmailField(unique=True)
 
     def __str__(self):
@@ -25,6 +26,23 @@ class DiscountCode(models.Model):
     code = ShortUUIDField(length=8, max_length=8, alphabet=f'{string.ascii_letters}{string.digits}', editable=False)
     models.UniqueConstraint(fields=['brand', 'code'], name='unique_brand_discount_code')
     valid = models.BooleanField(default=True)
+
+    @classmethod
+    def create_discount_codes(cls, brand_id, number_of_discount_codes):
+        with transaction.atomic():
+            for _ in range(number_of_discount_codes):
+                instance = cls(brand_id=brand_id)
+                instance.save()
+
+    @classmethod
+    def obtain_discount_code(cls, customer_id):
+        discount_code = cls.objects.filter(valid=True).first()
+        discount_code.valid = False
+        discount_code._customer_id = customer_id
+        discount_code._discount_code = discount_code.id
+        discount_code.save()
+
+        return discount_code.code
 
     def __str__(self):
         return f'{self.brand} - {self.code}'
