@@ -1,0 +1,12 @@
+# vscode
+.vscode/*
+!.vscode/settings.json
+
+# django
+env/
+venv/
+media/
+static_root/
+*.pyc
+db.sqlite3
+dev_secrets.py
