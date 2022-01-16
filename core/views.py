@@ -8,6 +8,11 @@ from .serializers import DiscountCodesGenerateSerializer
 
 
 class DiscountCodesGenerateView(GenericAPIView):
+    """
+    This endpoint generates a number of discount codes for a brand.
+    Each discount code can be used once with one user.
+    """
+
     allowed_methods = ('POST', 'OPTIONS', 'HEAD')
     serializer_class = DiscountCodesGenerateSerializer
 
@@ -20,6 +25,11 @@ class DiscountCodesGenerateView(GenericAPIView):
 
 
 class DiscountCodeObtainView(APIView):
+    """
+    This endpoint obtains a discount code from a brand.
+    The user is defined by the session/token.
+    """
+
     allowed_methods = ('POST', 'OPTIONS', 'HEAD')
 
     def post(self, request, *args, **kwargs):
