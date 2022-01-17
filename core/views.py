@@ -33,11 +33,12 @@ class DiscountCodeObtainView(APIView):
     allowed_methods = ('POST', 'OPTIONS', 'HEAD')
 
     def post(self, request, *args, **kwargs):
+        brand_id = kwargs['pk']
         customer_id = request.user.id
         customer_exists = Customer.objects.filter(user_id=customer_id).exists()
         if not customer_exists:
             return Response({'details': 'Customer not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        discount_code = DiscountCode.obtain_discount_code(customer_id)
+        discount_code = DiscountCode.obtain_discount_code(brand_id, customer_id)
 
         return Response({'discount_code': discount_code}, status=status.HTTP_200_OK)

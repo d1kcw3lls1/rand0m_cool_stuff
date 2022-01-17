@@ -35,8 +35,8 @@ class DiscountCode(models.Model):
                 instance.save()
 
     @classmethod
-    def obtain_discount_code(cls, customer_id):
-        discount_code = cls.objects.filter(valid=True).first()
+    def obtain_discount_code(cls, brand_id, customer_id):
+        discount_code = cls.objects.filter(valid=True, brand__id=brand_id).first()
         discount_code.valid = False
         discount_code._customer_id = customer_id
         discount_code._discount_code = discount_code.id
