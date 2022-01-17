@@ -1,1 +1,1 @@
-# Billogram Feature Design Task
+# Discount Codes Generator
